@@ -18,7 +18,7 @@
 			<div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 content">
 					<div>
 					    <h1>RBAC</h1>
-					    <form action="{:url('home/admin/upuser',['id' => $userinfo['user_id']])} " method="post">
+					    <form action="{:{:url('home/users/upuser',['id' => $userinfo['user_id']])} " method="post">
 					    <table> 
 					    {notempty name="userinfo"}
 					     <tr>
@@ -27,33 +27,22 @@
 					    </tr>
 					    <tr>
 					    <td>用户名</td>
-					    <td><input type="text" name="user_name" value="{$userinfo.user_name}"></td>
+					    <td><span>{$userinfo.user_name}</span></td>
 					    </tr>
 					      <tr>
 					    <td>邮箱</td>
-					    <td><input type="text" name="user_email" value="{$userinfo.user_email}"></td>
+					    <td><span>{$userinfo.user_email}</span></td>
 					    </tr>
 					    <tr>
 					    <td>身份</td>
 					    {if condition="$userinfo['user_type'] != '0'"}
-						<td>用户</td>
+					    <td>用户<span style="color:red;font-weight:900;">不可修改</span></td>
 						{else/}
-						<td>管理员</td>
+							<td>管理员<span style="color:red;font-weight:900;">不可修改</span></td>
 						{/if}
 						</tr>
-					    <tr>
-					    <td>密码</td>
-					    <td><input type="password" name="user_password"></td>
-					    </tr>
-					    <tr>
-					    <td>重新确认密码</td>
-					    <td><input type="password" name="rpassword"></td>
-					    </tr>
-					      <tr>
-					    <td colspan="2"><input type="submit"  value="修改"></td>
-					    </tr>
 					    {/notempty}
-						    </table>
+					    </table>
 					    </form>
 					    <p>项目源码地址：<a href="https://git.oschina.net/honoryao/tp5-rbac" >honoryao/tp5-rbac</a></p>
 					</div>

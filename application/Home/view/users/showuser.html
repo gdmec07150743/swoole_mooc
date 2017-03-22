@@ -1,0 +1,66 @@
+
+	<div class="body">
+		<div class="container">
+			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 sidebar">
+					<ul class="nav nav-sidebar">
+			            <li><strong class="caret pull-right"></strong>权限演示页面</li>
+			            <li><a href="">测试页面一</a></li>
+			            <li><a href="">测试页面二</a></li>
+			            <li><a href="">测试页面三</a></li>
+			            <li><a href="">测试页面四</a></li>
+			            <li><a href="">测试页面五</a></li>
+			            <li><strong class="caret pull-right"></strong>系统设置</li>
+			            <li><a href="{:url('home/users/showuser')}">用户管理</a></li>
+			            <li><a href="">角色管理</a></li>
+			            <li><a href="">权限管理</a></li>
+			        </ul>
+			</div>
+			<div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 content">
+				<div>
+				  <table> 
+				    <tr>
+				    <td>ID</td>
+				    <td>用户名</td>   
+				     <td>是否管理员</td>   
+				    <td>操作</td>   
+				    </tr>
+		     {if condition="$user != '' &&$Think.session.userinfo['user_type']=='0'"}
+					 {volist name="user" id="vo"}
+					 <tr>
+						<td>{$vo.user_id}</td>
+						<td>{$vo.user_name}</td>
+						{if condition="$vo['user_type'] != '0'"}
+						<td>用户</td>						
+						{else/}
+						<td>管理员</td>			
+						{/if}
+						<td><a href="{:url('home/users/upuser',['id' => $vo['user_id']])}">修改</a>
+								<a href="{:url('home/users/deluser',['id' => $vo['user_id']])}"">删除</a>
+						</td>
+					</tr>
+					{/volist}
+					{else/}
+					{volist name="user" id="vo"}
+					 <tr>
+						<td>{$vo.user_id}</td>
+						<td>{$vo.user_name}</td>
+						{if condition="$vo['user_type'] != '0'"}
+						<td>用户</td>						
+						{else/}
+						<td>管理员</td>			
+						{/if}
+						<td><a href="{:url('home/users/userinfo',['id' => $vo['user_id']])}">查看</a></td>
+					</tr>
+					{/volist}
+		     {/if}
+				    </table>
+				    <p>项目源码地址：<a href="https://git.oschina.net/honoryao/tp5-rbac" >honoryao/tp5-rbac</a></p>
+				</div>
+				<hr/>
+		        <footer>
+		            <p class="pull-left">@qq：2463523099</p>
+		            <p class="pull-right">微信：15109269885</p>
+		        </footer>
+			</div>
+		</div>
+	</div>

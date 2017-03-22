@@ -7,6 +7,15 @@
 <meta name="keywords" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="H_CSSbootstrap.min.css" >
+<style type="text/css">
+    td{
+     padding:5px 15px;
+     border:1px #333 solid;
+     }
+     td a{
+      padding:0px 10px;
+     }
+   </style>
 </head>
 <body>
 	<div class="header">
@@ -50,48 +59,19 @@
 						</li>
 					</ul>
 					<ul class="nav  navbar-right navbar-nav">
-					{if condition="!isset($Think.session.userinfo['user_name'])"}
-				    <li><a href="/public/home/admin/login.html">登 录</a></li>
-				    <li><a href="/public/home/admin/regist.html">注 册</a></li>
+					{if condition="!isset($Think.session.userinfo['user_name'])&&!isset($Think.session.userinfo['user_id'])"}
+				    <li><a href="{:url('home/admin/login')}">登 录</a></li>
+				    <li><a href="{:url('home/admin/regist')}">注 册</a></li>
 					{else /}
-				   <li> <a href="javascript:void(0)">你好：{$Think.session.userinfo['user_name']}</a></li>
+				   <li> <a href="{:url('home/admin/upuser',['id' => $Think.session.userinfo['user_id']])}">你好：{$Think.session.userinfo['user_name']}</a></li>
+				   	<li><a href="{:url('home/admin/logout')}"> 退出</a></li>
 				   {/if}
-				   
-						<li>
-						<a href="/public/home/admin/logout.html"> 退出</a>
-						</li>
 					</ul>
 				</div>
 			</nav>
 		</div>
 	</div>
-	<div class="body">
-		<div class="container">
-			<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3 sidebar">
-					<ul class="nav nav-sidebar">
-			            <li><strong class="caret pull-right"></strong>权限演示页面</li>
-			            <li><a href="">测试页面一</a></li>
-			            <li><a href="">测试页面二</a></li>
-			            <li><a href="">测试页面三</a></li>
-			            <li><a href="">测试页面四</a></li>
-			            <li><a href="">测试页面五</a></li>
-			            <li><strong class="caret pull-right"></strong>系统设置</li>
-			            <li><a href="">用户管理</a></li>
-			            <li><a href="">角色管理</a></li>
-			            <li><a href="">权限管理</a></li>
-			        </ul>
-			</div>
-			<div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 content">
-			
 					{__REPLACE__}
-				<hr/>
-		        <footer>
-		            <p class="pull-left">@qq：2463523099</p>
-		            <p class="pull-right">微信：15109269885</p>
-		        </footer>
-			</div>
-		</div>
-	</div>
 <script type="text/javascript" src="http://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
 <script type="text/javascript" src="http://cdn.staticfile.org/jqueryui/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="http://cdn.staticfile.org/jqueryui-touch-punch/0.2.2/jquery.ui.touch-punch.min.js"></script>

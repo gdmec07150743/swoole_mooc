@@ -3,7 +3,6 @@ namespace app\Home\controller;
 
 use app\common\controller\Base;
 use think\Session;
-use phpDocumentor\Reflection\Types\This;
 
 class Admin extends Base
 {
@@ -12,22 +11,22 @@ class Admin extends Base
         return view('index');
     }
     
-    public function upuser($id=''){
+    public function upuser(){
         	if ($this->request->isPost()){
-    		$data=input();
+    		$userid=input('id');
     		$data['user_password']=$this->md5Pwd($data['user_password']);
     		$res=$this->saveUser($data);
 		    		if($res==false){
-		    			return $this->error('修改失败','public/home/admin/upuser');
+		    			return $this->error('修改失败',url('home/users/upuser',['id' => $userid]));
 		    		}else{
 		    			Session::set('userinfo',$data);
-		    			return redirect('public/home/admin/index');
+		    			return redirect(url('home/admin/index'));
 		    		}
    			 }else {
    			 	$userid=input('id');
    			 	$data=$this->getUserById($userid);
    			 	$this->assign('userinfo',$data);
-   			 	return $this->view('upuser');
+   			 	return $this->fetch();
    			 }
     }
     public function login(){
@@ -36,12 +35,12 @@ class Admin extends Base
     		$data=$this->checkPwd($data['user_name'], $data['user_password']);
     		if ($data){
     			Session::set('userinfo',$data);
-    			$this->assign('user_name', $data['user_name']);
-    			return redirect('public/home/admin/index');
+    			return redirect(url('home/admin/index'));
     		}
-    		return redirect('public/home/admin/login');
+    		return $this->error('用户不存在或者密码错误',url('home/admin/login'));
+    	}else {
+    		return view('login');
     	}
-    	return redirect('public/home/admin/login');
     }
     
     public function regist(){
@@ -51,10 +50,10 @@ class Admin extends Base
     		$data['user_creatdate']=time();
     		$res=$this->saveUser($data);
     		if(is_string($res)){
-    			return $this->error($res,'public/home/admin/login');
+    			return $this->error($res,url('home/admin/login'));
     		}else{
-    			Session::set('userinfo',$data);
-    			return redirect('public/home/admin/index');
+    			Session::set('userinfo',$res);
+    			return redirect(url('home/admin/index'));
     		}
     	}
     	return view('regist');
@@ -64,6 +63,6 @@ class Admin extends Base
     {
         /**退出登录删除全部session**/
         session(null);
-       	return view('login');
+       	return redirect(url('home/admin/index'));
     }
 }

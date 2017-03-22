@@ -26,6 +26,7 @@ class Base extends Controller
         $this->assign('now_uri', $this->now_uri);
         $this->assign('now_url', $this->now_url);
         $this->bodymap['body_id'] = session('body_id');
+        $this->user=new User();
     }
     
     public function md5Pwd($param) {
@@ -33,12 +34,10 @@ class Base extends Controller
     }
     
     public function getUserById($id){
-    	$this->user=new User();
-    	$date=$this->user->where('user_id',$id)->find();
+        return 	$date=$this->user->where('user_id',$id)->where('user_status','1')->find();
     }
     
     public function checkPwd($name,$pwd){
-    	$this->user=new User();
     	$pwd = $this->md5Pwd($pwd);
     	$date=$this->user->where('user_name',$name)->find();
     	if ($pwd==$date['user_password']&&$date['user_status']==1){
@@ -49,7 +48,6 @@ class Base extends Controller
     }
     
     public function saveUser($date){
-    	$this->user=new User();
     	$date['user_update']=time();
     	$user=$this->user->where('user_name',$date['user_name'])->find();
     	if ($user==null){
