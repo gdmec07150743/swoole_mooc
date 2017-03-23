@@ -11,12 +11,13 @@
 			            <li><a href="">测试页面五</a></li>
 			            <li><strong class="caret pull-right"></strong>系统设置</li>
 			            <li><a href="{:url('home/users/showuser')}">用户管理</a></li>
-			            <li><a href="">角色管理</a></li>
+			            <li><a href="{:url('home/rolers/showrole')}">角色管理</a></li>
 			            <li><a href="">权限管理</a></li>
 			        </ul>
 			</div>
 			<div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 content">
 					<div>
+					<a class="pull-right" href="javascript:history.back(-1);">返回列表</a>
 					    <h1>RBAC</h1>
 					    <form action="{:url('home/admin/upuser',['id' => $userinfo['user_id']])} " method="post">
 					    <table> 
@@ -41,16 +42,30 @@
 						<td>管理员</td>
 						{/if}
 						</tr>
-					    <tr>
+						<tr>
+					    <td>用户角色</td>
+					    <td>{if condition="$roles!=''"}
+					    			{foreach $roles as $roles_item}
+					    			<span> 
+					    			{if condition="in_array($roles_item['roles_id'],$rolesid)"}
+					    			<input type="hidden" name="roles_id[]" value="{$roles_item['roles_id']}" >
+					    			{$roles_item['roles_name']}/
+					    			{/if}
+					    			</span>
+					    			{/foreach}
+					    		{/if}
+					    </td>
+					    </tr>
+					    <!--  tr>
 					    <td>密码</td>
 					    <td><input type="password" name="user_password"></td>
 					    </tr>
 					    <tr>
 					    <td>重新确认密码</td>
 					    <td><input type="password" name="rpassword"></td>
-					    </tr>
+					    </tr>-->
 					      <tr>
-					    <td colspan="2"><input type="submit"  value="修改"></td>
+					    <td colspan="2"><input type="submit"  value="修改"><input type="button"  value="返回" onclick="javascript:history.back(-1)"></td>
 					    </tr>
 					    {/notempty}
 						    </table>

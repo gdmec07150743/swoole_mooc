@@ -11,12 +11,13 @@
 			            <li><a href="">测试页面五</a></li>
 			            <li><strong class="caret pull-right"></strong>系统设置</li>
 			            <li><a href="{:url('home/users/showuser')}">用户管理</a></li>
-			            <li><a href="">角色管理</a></li>
+			            <li><a href="{:url('home/rolers/showrole')}">角色管理</a></li>
 			            <li><a href="">权限管理</a></li>
 			        </ul>
 			</div>
 			<div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 content">
 					<div>
+					<a class="pull-right" href="{:url('home/users/showuser')}">返回列表</a>
 					    <h1>RBAC</h1>
 					    <form action="{:{:url('home/users/upuser',['id' => $userinfo['user_id']])} " method="post">
 					    <table> 
@@ -41,6 +42,20 @@
 							<td>管理员<span style="color:red;font-weight:900;">不可修改</span></td>
 						{/if}
 						</tr>
+					    <tr>
+					    <td>用户角色</td>
+					    <td>{if condition="$roles!=''"}
+					    			{foreach $roles as $roles_item}
+					    			<span> 
+					    			{if condition="in_array($roles_item['roles_id'],$rolesid)"}
+					    			<input type="hidden" name="roles_id[]" value="{$roles_item['roles_id']}" >
+					    			{$roles_item['roles_name']}/
+					    			{/if}
+					    			</span>
+					    			{/foreach}
+					    		{/if}
+					    </td>
+					    </tr>
 					    {/notempty}
 					    </table>
 					    </form>

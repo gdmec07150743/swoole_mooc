@@ -29,38 +29,43 @@ class Base extends Controller
         $this->user=new User();
     }
     
-    public function md5Pwd($param) {
+    protected function md5Pwd($param) {
     	return $pwd=md5($param);
     }
     
-    public function getUserById($id){
-        return 	$date=$this->user->where('user_id',$id)->where('user_status','1')->find();
+    protected function getUserById($id){
+        return 	$date=$this->user->where('user_id',$id)->where('status','1')->find();
     }
     
-    public function checkPwd($name,$pwd){
+    protected function checkPwd($name,$pwd){
     	$pwd = $this->md5Pwd($pwd);
     	$date=$this->user->where('user_name',$name)->find();
-    	if ($pwd==$date['user_password']&&$date['user_status']==1){
+    	if ($pwd==$date['user_password']&&$date['status']==1){
     		return $date;
     	}else{
     		return false;
     	}
     }
     
-    public function saveUser($date){
-    	$date['user_update']=time();
-    	$user=$this->user->where('user_name',$date['user_name'])->find();
-    	if ($user==null){
-    		$res=$this->user->save($date);
-    		if($res){
-    			return $date= $this->user->find($date);
-    		}else {
-    			return false;
-    		}
-    	}else {
-    		return false;
+    protected function saveUser($date){
+    	if(!empty($date['user_id'])){
+    		$user=$this->user->where('user_id',$date['user_id']) ->  where('status','1')->find();
     	}
-
-    }
-    
+    	$datanow=date('Y-m-d H:i:s');
+    	if ($user){
+    		$date['user_update']=$datanow;
+    		$res=$this->user->save($date,['user_id' => $date['user_id']]);
+    	}else {
+    		if (!empty($date['user_name'])){
+    			$regist=$this->user->where('user_name',$date['user_name']) -> where('status','1')->find();
+    			if($regist){
+    				$res=false;
+    			}else{
+    			$date['user_creatdate']=$datanow;
+    			$res=$this->user->save($date);
+    			}
+    		}
+    	}
+    	return $res;
+	}
 }
