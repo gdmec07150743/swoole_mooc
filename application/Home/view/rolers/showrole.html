@@ -16,44 +16,32 @@
 			        </ul>
 			</div>
 			<div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 content">
+																{/*if condition="$Think.session.userinfo['user_type']=='0'"*/}
+			<a class="pull-right" href="{:url('home/rolers/dorole')}">添加角色</a>
 				<div>
 				  <table> 
-				    <tr>
-				    <td>ID</td>
-				    <td>用户名</td>   
-				     <td>是否管理员</td>   
-				    <td>操作</td>   
+		     		<tr>
+					    <td>ID</td>
+					    <td>角色名称</td>   
+					    <td>操作</td>   
 				    </tr>
-		     {if condition="$user != '' &&$Think.session.userinfo['user_type']=='0'"}
-					 {volist name="user" id="vo"}
+				    {notempty name="roles"}
+					 {volist name="roles" id="vo"}
 					 <tr>
-						<td>{$vo.user_id}</td>
-						<td>{$vo.user_name}</td>
-						{if condition="$vo['user_type'] != '0'"}
-						<td>用户</td>						
-						{else/}
-						<td>管理员</td>			
-						{/if}
-						<td><a href="{:url('home/users/upuser',['id' => $vo['user_id']])}">修改</a>
-								<a href="{:url('home/users/deluser',['id' => $vo['user_id']])}"">删除</a>
+						<td>{$vo.roles_id}</td>
+						<td>{$vo.roles_name}</td>
+						<td>
+								<a href="{:url('home/rolers/dorole',['id' => $vo['roles_id']])}">修改</a>
+								<a href="{:url('home/rolers/bindact',['id' => $vo['roles_id']])}">设置权限</a>
+								<a href="{:url('home/rolers/delrole',['id' => $vo['roles_id']])}"">删除</a>
 						</td>
 					</tr>
 					{/volist}
-					{else/}
-					{volist name="user" id="vo"}
-					 <tr>
-						<td>{$vo.user_id}</td>
-						<td>{$vo.user_name}</td>
-						{if condition="$vo['user_type'] != '0'"}
-						<td>用户</td>						
-						{else/}
-						<td>管理员</td>			
-						{/if}
-						<td><a href="{:url('home/users/userinfo',['id' => $vo['user_id']])}">查看</a></td>
-					</tr>
-					{/volist}
-		     {/if}
+					{/notempty}
 				    </table>
+																	    {/*else/*/}
+																	    <!--div ><span style="color:red; font-size:18px; font-weight:900;">无权进行此操作</span></div-->	    
+															     		{/*/if*/}
 				    <p>项目源码地址：<a href="https://git.oschina.net/honoryao/tp5-rbac" >honoryao/tp5-rbac</a></p>
 				</div>
 				<hr/>

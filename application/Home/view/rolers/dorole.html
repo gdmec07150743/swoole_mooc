@@ -16,44 +16,42 @@
 			        </ul>
 			</div>
 			<div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 content">
+			<a class="pull-right" href="{:url('home/rolers/showrole')}">返回列表</a>
 				<div>
+				  <form action="{:url('home/rolers/dorole')}"  method="post">
 				  <table> 
+				  {present name="roles"}
+							 <tr>
+						    <td>ID</td>    <td>{$roles['roles_id']}<input type="hidden" name="roles_id" value="{$roles['roles_id']}"></td>   
+						    </tr>
+						    <tr>
+								<td>角色名称</td>    <td><input type="text" name="roles_name" value="{$roles['roles_name']}"></td>
+							</tr>
+							{notempty name="access"}
+							<tr>
+								<td>权限列表</td>
+								<td>
+									{foreach $access as $access_item}
+					    			<label> <input type="checkbox" name="access_id[]" value="{$access_item['access_id']}" 
+					    			{if condition="in_array($access_item['access_id'],$rc_accessid)"}checked{/if}>{$access_item['ac_name']}</label>
+					    			{/foreach}
+								</td>
+							</tr>
+							{/notempty}
+							<tr>
+							<td colspan="2"><input type="submit"  value="修改"><input type="button"  value="返回" onclick="javascript:history.back(-1)"></td>
+							</tr>
+					{else /}
 				    <tr>
-				    <td>ID</td>
-				    <td>用户名</td>   
-				     <td>是否管理员</td>   
-				    <td>操作</td>   
-				    </tr>
-		     {if condition="$user != '' &&$Think.session.userinfo['user_type']=='0'"}
-					 {volist name="user" id="vo"}
-					 <tr>
-						<td>{$vo.user_id}</td>
-						<td>{$vo.user_name}</td>
-						{if condition="$vo['user_type'] != '0'"}
-						<td>用户</td>						
-						{else/}
-						<td>管理员</td>			
-						{/if}
-						<td><a href="{:url('home/users/upuser',['id' => $vo['user_id']])}">修改</a>
-								<a href="{:url('home/users/deluser',['id' => $vo['user_id']])}"">删除</a>
-						</td>
+						<td>角色名称</td>
+						<td><input type="text" name="roles_name" value=""></td>
 					</tr>
-					{/volist}
-					{else/}
-					{volist name="user" id="vo"}
-					 <tr>
-						<td>{$vo.user_id}</td>
-						<td>{$vo.user_name}</td>
-						{if condition="$vo['user_type'] != '0'"}
-						<td>用户</td>						
-						{else/}
-						<td>管理员</td>			
-						{/if}
-						<td><a href="{:url('home/users/userinfo',['id' => $vo['user_id']])}">查看</a></td>
+					<tr>
+					<td colspan="2"><input type="submit"  value="添加"><input type="button"  value="返回" onclick="javascript:history.back(-1)"></td>
 					</tr>
-					{/volist}
-		     {/if}
+					{/present}
 				    </table>
+				    </form>	
 				    <p>项目源码地址：<a href="https://git.oschina.net/honoryao/tp5-rbac" >honoryao/tp5-rbac</a></p>
 				</div>
 				<hr/>

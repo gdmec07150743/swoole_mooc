@@ -16,44 +16,38 @@
 			        </ul>
 			</div>
 			<div class="col-xs-12 col-sm-8 col-md-9 col-lg-9 content">
+			<a class="pull-right" href="{:url('home/action/showact')}">返回列表</a>
 				<div>
+				  <form action="{:url('home/action/doact')}"  method="post">
 				  <table> 
+				  {present name="access"}
+							 <tr>
+						    <td>ID</td>    <td>{$access['ac_id']}<input type="hidden" name="ac_id" value="{$access['ac_id']}"></td>   
+						    </tr>
+						    <tr>
+								<td>权限名称</td>    <td><input type="text" name="ac_name" value="{$access['ac_name']}"></td>
+							</tr>
+							<tr>
+								<td>权限URL</td>    <td><textarea cols="60"  rows="9" type="text" name="ac_url" placeholder="请输入Url地址，每行一条" >{$access['ac_url']}</textarea></td>
+							</tr>
+							<tr>
+							<td colspan="2"><input type="submit"  value="修改"><input type="button"  value="返回" onclick="javascript:history.back(-1)"></td>
+							</tr>
+					{else /}
 				    <tr>
-				    <td>ID</td>
-				    <td>用户名</td>   
-				     <td>是否管理员</td>   
-				    <td>操作</td>   
-				    </tr>
-		     {if condition="$user != '' &&$Think.session.userinfo['user_type']=='0'"}
-					 {volist name="user" id="vo"}
-					 <tr>
-						<td>{$vo.user_id}</td>
-						<td>{$vo.user_name}</td>
-						{if condition="$vo['user_type'] != '0'"}
-						<td>用户</td>						
-						{else/}
-						<td>管理员</td>			
-						{/if}
-						<td><a href="{:url('home/users/upuser',['id' => $vo['user_id']])}">修改</a>
-								<a href="{:url('home/users/deluser',['id' => $vo['user_id']])}"">删除</a>
-						</td>
+						<td>权限名称</td>
+						<td><input type="text" name="ac_name" value=""></td>
 					</tr>
-					{/volist}
-					{else/}
-					{volist name="user" id="vo"}
-					 <tr>
-						<td>{$vo.user_id}</td>
-						<td>{$vo.user_name}</td>
-						{if condition="$vo['user_type'] != '0'"}
-						<td>用户</td>						
-						{else/}
-						<td>管理员</td>			
-						{/if}
-						<td><a href="{:url('home/users/userinfo',['id' => $vo['user_id']])}">查看</a></td>
+					<tr>
+						<td>权限URL</td>
+						<td><textarea cols="60"  rows="9" type="text" name="ac_url" value=""></textarea></td>
 					</tr>
-					{/volist}
-		     {/if}
+					<tr>
+					<td colspan="2"><input type="submit"  value="添加"><input type="button"  value="返回" onclick="javascript:history.back(-1)"></td>
+					</tr>
+					{/present}
 				    </table>
+				    </form>	
 				    <p>项目源码地址：<a href="https://git.oschina.net/honoryao/tp5-rbac" >honoryao/tp5-rbac</a></p>
 				</div>
 				<hr/>

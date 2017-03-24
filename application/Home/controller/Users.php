@@ -63,7 +63,7 @@ class Users extends Base{
 						if(!in_array($rolesid, $rel_role_id)){
 							$list['rolesid']=$rolesid;
 							$list['userid']=$data['user_id'];
-							$list['updatetime']=date('Y-m-d H:i:s');
+							$list['updatetime']=$this->dataNow();
 							$this->user_roles->data($list,true)->isUpdate(false)->save();
 						}
 					}
