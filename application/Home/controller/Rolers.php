@@ -32,7 +32,9 @@ class Rolers extends Base
 		if(session('userinfo')){
 			if($this->request->isPost()){
 				$data=input();
+				
 				if (empty($data['roles_id'])){
+					
 					$roles=$this->roles->where('roles_name' ,$data['roles_name'])-> where('status','1')->find();
 					if ($roles){
 						return $this->error('角色已经存在',url('home/rolers/dorole'));
@@ -44,7 +46,15 @@ class Rolers extends Base
 					}else {
 						return $this->error('角色添加失败',url('home/rolers/dorole'));
 					}
+					
+				}elseif(empty($data['roles_name'])){
+					return $this->error('角色名不能为空,',url('home/rolers/dorole'));
+					
 				}else{
+					$role_find_name=$this->roles->where('roles_name' ,$data['roles_name'])-> where('status','1')->find();
+					if ($role_find_name){
+						return $this->error('角色修改失败,角色名重复',url('home/rolers/dorole',['id' => $data['roles_id']]));
+					}
 					$data['roles_update']=$this->dataNow();
 					$result=$this->roles->save($data,['roles_id' => $data['roles_id']]);
 					if ($result){

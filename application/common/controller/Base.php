@@ -15,15 +15,15 @@ class Base extends Controller
     public $now_url;//请求路径
     public $privilege_urls = [];//保存去的权限链接
     protected $allowAllAction = [//默认允许路径
-    		'home/admin/login'
+    		'home/admin/login',
+    		'home/admin/regist',
     ];
     public $ignore_url = [
     		'home/admin/index',
     		'home/error/forbidden' ,
     		'home/admin/login',
-    		'home/admin/logout',
+    		'home/admin/logout',	
     		'home/admin/regist',
-    		
     ];
     
 //最先执行的操作
@@ -40,12 +40,15 @@ class Base extends Controller
     	$this->now_url = $this->request->path();
     }
 
-    public function second() {
+    public function second(){
     	$login_status = $this->checkLoginStatus();
-    	if ( !$login_status && !in_array( $this->now_uri,$this->allowAllAction )  ) {
-    		return $this->error('没有登录',url('home/admin/login'));
+    	if (!$login_status ){
+    		if (in_array( $this->now_uri,$this->allowAllAction )){
+    			return $this->fetch();
+    		}else{
+    			return $this->error('没有登录',url('home/admin/login'));
+    		}
     	}
-    	
     	if( !$this->checkPrivilege($this->now_uri ) ){
     		$this->redirect(url('home/error/forbidden'));
     		return false;
@@ -92,25 +95,23 @@ class Base extends Controller
     		$this->access=Loader::model('Access');
     		$access_id_list_true=array();
     		foreach ($roles_id_list as $jian =>$roles_id){
-    			$access_id_list[$jian]=$this->roleacc->where('roleac_roleid',$roles_id)->column('roleac_ac_id');
-    			foreach ($access_id_list[$jian] as $vue){
-    				array_push($access_id_list_true,$vue);
-    			}
+    			$access_id_list=$this->roleacc->where('roleac_roleid',$roles_id)->column('roleac_ac_id');
     		}
-    		$access_id_list_true=array_unique($access_id_list_true);
-    		foreach ($access_id_list_true as $access_id){
-    			$act[]=$this->access->where('ac_id', $access_id  )->column('ac_url');
+																													// dump($access_id_list[$jian]);foreach ($access_id_list[$jian] as $vue){array_push($access_id_list_true,$vue);}dump($access_id_list_true);}exit;$access_id_list_true=array_unique($access_id_list_true);
+    		$act=array();
+    		foreach ($access_id_list as $access_id){
+    			$act_pice=$this->access->where('ac_id', $access_id  )->column('ac_url');
+    			$act=array_merge($act,$act_pice);
     		}
-    		if ($act){
+    		if (!empty($act)){
     			foreach ($act as $_item){
-    				 $access_act[]=json_decode($_item['0'],true);
-    				 foreach ($access_act as $urlarr){
-    				 	foreach ($urlarr as $url){array_push($this->privilege_urls,$url);}
-    				 } 
+    				 $access_act=@json_decode($_item,true);
+    				 $this->privilege_urls=array_merge($this->privilege_urls,$access_act);
     			}
     		}
     	}
-    	$this->privilege_urls=array_unique($this->privilege_urls);
+		//有的角色权限重复，或者错误输入空值，去重去空
+    	$this->privilege_urls=array_filter(array_unique($this->privilege_urls));
     	return    $this->privilege_urls;
     }
     
@@ -152,14 +153,17 @@ class Base extends Controller
     }
     
     protected function saveUser($date){
-    	if(!empty($date['user_id'])){
-    		$user=$this->user->where('user_id',$date['user_id']) ->  where('status','1')->find();
-    	}
-    	if ($user){
-    		$date['user_update']=$this->dataNow();
-    		$res=$this->user->save($date,['user_id' => $date['user_id']]);
-    	}else {
-    		if (!empty($date['user_name'])){
+//     	if(!empty($date['user_id'])&&!empty($date['user_name'])){
+//     		$user=$this->user->where('user_id',$date['user_id']) ->  where('user_name','<>',$date['user_name'])->  where('status','1')->find();
+// 			$user_find_name=$this->user->where('user_name',$date['user_name']) ->  where('status','1')->find();
+//     		if ($user&&!$user_find_name){
+//     			$date['user_update']=$this->dataNow();
+//     			$res=$this->user->save($date,['user_id' => $date['user_id']]);
+//     		}else{
+//     			$res=false;
+//     		}
+//     	}else {
+    		if (!empty($date['user_name'])&&empty($date['user_id'])){
     			$regist=$this->user->where('user_name',$date['user_name']) -> where('status','1')->find();
     			if($regist){
     				$res=false;
@@ -168,7 +172,10 @@ class Base extends Controller
     			$res=$this->user->save($date);
     			}
     		}
-    	}
+    		
+    		$date['user_update']=$this->dataNow();
+    		$res=$this->user->save($date,['user_id' => $date['user_id']]);
+//     	}
     	return $res;
 	}
 }

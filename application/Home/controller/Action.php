@@ -17,7 +17,9 @@ class Action extends Base
 			$access=$this->access->where('status','1')->select();
 			foreach ($access as $k=>$v){
 				$access[$k]['ac_url']=json_decode($access[$k]['ac_url']);
-				$access[$k]['ac_url']=implode("\n", $access[$k]['ac_url']);
+				$access[$k]['ac_url']=implode("\n <br>", $access[$k]['ac_url']);
+// 				$access[$k]['ac_url']='<span>'.$access[$k]['ac_url'].'</span></br>';
+			
 			}
 			$this->assign('access',$access);
 			return $this->fetch();

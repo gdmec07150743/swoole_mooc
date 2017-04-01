@@ -28,7 +28,7 @@ class Admin extends Base
 	    			Session::set('userinfo',$userinfo);
 	    			return $this->success('修改成功',url('home/admin/index'));
 	    		}else{
-	    			return $this->error('修改失败',url('home/admin/upuser',['id' => $userid]));
+	    			return $this->error('修改失败,可能存在相同用户名',url('home/admin/upuser',['id' => $userid]));
 	    		}
    			 }else {
    			 	$userid=input('id');
@@ -55,7 +55,7 @@ class Admin extends Base
     		}
     		return $this->error('用户不存在或者密码错误',url('home/admin/login'));
     	}else {
-    		return view('login');
+    		return $this->fetch();
     	}
     }
     
@@ -71,13 +71,13 @@ class Admin extends Base
     			return $this->error('注册失败，用户存在',url('home/admin/login'));
     		}
     	}
-    	return view('regist');
+    	return $this->fetch();
     }
     
     public function logout()
     {
         /**退出登录删除全部session**/
         session(null);
-       	return redirect(url('home/admin/index'));
+       	return redirect(url('home/admin/login'));
     }
 }
