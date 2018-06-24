@@ -1,0 +1,8 @@
+.idea
+composer.lock
+*.log
+/www/admin/node_modules/*
+/www/home/node_modules/*
+public/static/home/common/suxunMedia_ch.flv
+*.webm
+email.sh
